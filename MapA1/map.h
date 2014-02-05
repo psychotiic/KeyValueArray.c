@@ -1,0 +1,67 @@
+// Author David White
+// Date 1/28/14
+// Program: A1 Map
+// About:  I fixed the errors and added the hash for keys I didn't get the serilize/deserilize done yet but 
+// you told me to fix this and I wanted to get some kind of grade, sorry I was having issue thanks.
+
+
+
+#ifndef __A1_MAP_H__
+#define __A1_MAP_H__
+ 
+#include <stdio.h>
+#include <inttypes.h>
+ 
+#define SYS_ERROR -1
+#define OK 0
+#define KEY_EXISTS 1
+#define NO_KEY_EXISTS 2
+ 
+#define NULL_POINTER 3
+#define NOT_INITIALIZED 4
+#define ERR_NOT_IMPLEMENTED 5
+#define REQUIRES_OPTIMIZATION 6
+ 
+// data to be stored for each slot
+typedef struct {
+	// if the key is NULL, then this entry counts as deleted
+	const char* key;
+ 
+	// the value assigned to the key
+	const char* value;
+ 
+	// the hash value of the key, if once set this will never be change until the map is optimized
+	int64_t hash;
+} map_entry_t;
+ 
+// the root map struct
+typedef struct {
+	// used to detect that the map was initialized
+	int64_t magic;
+ 
+	// a pointer to the entries (basically an array of slots)
+	map_entry_t* entries;
+ 
+	// the amount of valid entries in the map
+	unsigned int size;
+ 
+	// the amount of slots being allocated, that means that have fixed hash values
+	unsigned int allocated;
+ 
+	// the total amount of entries (slots)
+	unsigned int capacity;
+} map_t;
+ 
+// Part one functions.
+void map_init(map_t*);
+int map_put(map_t*, const char*, const char*);
+const char* map_get(map_t*, const char*);
+int map_remove(map_t*, const char*);
+int map_size(map_t*);
+void map_destroy(map_t*);
+ 
+// Part two functions.
+int map_serialize(map_t*, FILE*);
+int map_deserialize(map_t*, FILE*);
+#endif
+ 
